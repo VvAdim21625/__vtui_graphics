@@ -1,4 +1,4 @@
-C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir
-C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/main.dir
-C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/edit_cache.dir
-C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/rebuild_cache.dir
+C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir
+C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/main.dir
+C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/edit_cache.dir
+C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/rebuild_cache.dir

@@ -1,4 +1,4 @@
-#include "vtui/error.hpp"
+#include "vtui/result.hpp"
 
 #include <cstdio>
 #include <cstdlib>

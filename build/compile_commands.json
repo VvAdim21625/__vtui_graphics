@@ -1,38 +1,50 @@
 [
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\vtui_core.dir\\src\\platform\\win32.cpp.obj /FdCMakeFiles\\vtui_core.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src\\platform\\win32.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/src/platform/win32.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/platform/win32.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\platform\\win32.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\platform\\win32.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/platform/win32.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/platform/win32.cpp.obj"
 },
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\vtui_core.dir\\src\\util\\utf8.cpp.obj /FdCMakeFiles\\vtui_core.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src\\util\\utf8.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/src/util/utf8.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/util/utf8.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\util\\utf8.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\util\\utf8.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/util/utf8.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/util/utf8.cpp.obj"
 },
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\vtui_core.dir\\src\\core\\buffer.cpp.obj /FdCMakeFiles\\vtui_core.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src\\core\\buffer.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/src/core/buffer.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/buffer.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\util\\wcwidth.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\util\\wcwidth.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/util/wcwidth.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/util/wcwidth.cpp.obj"
 },
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\vtui_core.dir\\src\\core\\renderer.cpp.obj /FdCMakeFiles\\vtui_core.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src\\core\\renderer.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/src/core/renderer.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/renderer.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\util\\grapheme.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\util\\grapheme.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/util/grapheme.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/util/grapheme.cpp.obj"
 },
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\vtui_core.dir\\src\\core\\error.cpp.obj /FdCMakeFiles\\vtui_core.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src\\core\\error.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/src/core/error.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/error.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\core\\buffer.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\core\\buffer.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/core/buffer.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/buffer.cpp.obj"
 },
 {
-  "directory": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\src -IC:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\include /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20 /FoCMakeFiles\\main.dir\\example\\main.cpp.obj /FdCMakeFiles\\main.dir\\ /FS -c C:\\Users\\Vadim\\source\\repos\\VvAdim21625\\__vtui_graphics\\example\\main.cpp",
-  "file": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/example/main.cpp",
-  "output": "C:/Users/Vadim/source/repos/VvAdim21625/__vtui_graphics/build/CMakeFiles/main.dir/example/main.cpp.obj"
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\core\\renderer.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\core\\renderer.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/core/renderer.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/renderer.cpp.obj"
+},
+{
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/include -IC:/Users/parsh/Documents/__vtui_graphics/src -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\vtui_core.dir\\src\\core\\result.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\src\\core\\result.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/src/core/result.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/vtui_core.dir/src/core/result.cpp.obj"
+},
+{
+  "directory": "C:/Users/parsh/Documents/__vtui_graphics/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\CLANG_~1.EXE -IC:/Users/parsh/Documents/__vtui_graphics/src -IC:/Users/parsh/Documents/__vtui_graphics/include -O3 -DNDEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -std=gnu++20 -o CMakeFiles\\main.dir\\example\\main.cpp.obj -c C:\\Users\\parsh\\Documents\\__vtui_graphics\\example\\main.cpp",
+  "file": "C:/Users/parsh/Documents/__vtui_graphics/example/main.cpp",
+  "output": "C:/Users/parsh/Documents/__vtui_graphics/build/CMakeFiles/main.dir/example/main.cpp.obj"
 }
 ]

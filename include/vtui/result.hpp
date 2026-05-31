@@ -15,10 +15,16 @@ enum class Errc {
   Unknown = -255,
 };
 
+/// Tag type for Result constructors that carry a success value.
 struct OkTag {};
+/// Tag type for Result constructors that carry an error code.
 struct ErrTag {};
 
+/// Tag constant for constructing a Result with a value (e.g. `Result<int>{Ok,
+/// 42}`).
 inline constexpr OkTag Ok{};
+/// Tag constant for constructing a Result with an error (e.g. `Result<int>{Err,
+/// Errc::IOError}`).
 inline constexpr ErrTag Err{};
 
 namespace detail {
@@ -62,41 +68,57 @@ class Result {
   Errc error_ = Errc::Ok;
   bool ok_ = false;
 
+  /// Return a pointer to the contained value (undefined behaviour when not
+  /// ok_).
   T* ptr() { return reinterpret_cast<T*>(storage_); }
+  /// Return a const pointer to the contained value (undefined behaviour when
+  /// not ok_).
   const T* ptr() const { return reinterpret_cast<const T*>(storage_); }
 
+  /// Terminate the process with the given message.
   void abort_with(const char* msg) const { detail::abort_with(msg); }
 
 public:
+  /// Result is not default-constructible.
+  Result() = delete;
+
+  /// Construct with a success value (copy).
   Result(OkTag, const T& val) noexcept(std::is_nothrow_copy_constructible_v<T>)
       : error_(Errc::Ok), ok_(true) {
     ::new (storage_) T(val);
   }
 
+  /// Construct with a success value (move).
   Result(OkTag, T&& val) noexcept(std::is_nothrow_move_constructible_v<T>)
       : error_(Errc::Ok), ok_(true) {
     ::new (storage_) T(std::move(val));
   }
 
+  /// Construct with an error code.
   Result(ErrTag, Errc err) noexcept : error_(err), ok_(false) {}
 
+  /// Destructor — destroys the contained value if present.
   ~Result() {
     if (ok_)
       ptr()->~T();
   }
 
+  /// Copy constructor.
   Result(const Result& other) : error_(other.error_), ok_(other.ok_) {
     if (ok_)
       ::new (storage_) T(*other.ptr());
   }
 
+  /// Move constructor.
   Result(Result&& other) noexcept(std::is_nothrow_move_constructible_v<T>)
       : error_(other.error_), ok_(other.ok_) {
     if (ok_)
       ::new (storage_) T(std::move(*other.ptr()));
   }
 
+  /// Copy assignment is deleted.
   Result& operator=(const Result&) = delete;
+  /// Move assignment is deleted.
   Result& operator=(Result&&) = delete;
 
   /**
@@ -109,6 +131,7 @@ public:
    */
   bool is_err() const { return !ok_; }
 
+  /// True when holding a value (same as is_ok()).
   explicit operator bool() const { return ok_; }
 
   /**
@@ -120,6 +143,7 @@ public:
     return *ptr();
   }
 
+  /** @copydoc unwrap */
   const T& unwrap() const {
     if (!ok_)
       abort_with("called unwrap() on an Err value");
@@ -136,6 +160,7 @@ public:
     return *ptr();
   }
 
+  /** @copydoc expect */
   const T& expect(const char* msg) const {
     if (!ok_)
       abort_with(msg);
@@ -152,7 +177,9 @@ public:
     return *ptr();
   }
 
+  /// Dereference to the contained value (undefined on error).
   T& operator*() { return *ptr(); }
+  /// Dereference to the contained value (undefined on error).
   const T& operator*() const { return *ptr(); }
 
   /**
@@ -164,6 +191,7 @@ public:
    * @brief Applies a function to the contained value.
    * @param f Mapping function T -> U.
    */
+  /** @copydoc map */
   template <typename F>
   auto map(F&& f) -> Result<decltype(f(std::declval<T&>()))> {
     using U = decltype(f(std::declval<T&>()));
@@ -172,6 +200,7 @@ public:
     return Result<U>{Ok, f(*ptr())};
   }
 
+  /** @copydoc map */
   template <typename F>
   auto map(F&& f) const -> Result<decltype(f(std::declval<const T&>()))> {
     using U = decltype(f(std::declval<const T&>()));
@@ -184,6 +213,7 @@ public:
    * @brief Chains a function that returns a Result.
    * @param f Function T -> Result<U>.
    */
+  /** @copydoc and_then */
   template <typename F>
   auto and_then(F&& f) -> decltype(f(std::declval<T&>())) {
     if (!ok_)
@@ -191,6 +221,7 @@ public:
     return f(*ptr());
   }
 
+  /** @copydoc and_then */
   template <typename F>
   auto and_then(F&& f) const -> decltype(f(std::declval<const T&>())) {
     if (!ok_)
@@ -214,10 +245,13 @@ template <>
 class Result<void> {
   Errc error_ = Errc::Ok;
 
+  /// Terminate the process with the given message.
   void abort_with(const char* msg) const { detail::abort_with(msg); }
 
 public:
+  /// Default constructor — represents success.
   Result() = default;
+  /// Construct with an error code.
   Result(ErrTag, Errc err) noexcept : error_(err) {}
 
   /**
@@ -230,6 +264,7 @@ public:
    */
   bool is_err() const { return error_ != Errc::Ok; }
 
+  /// True when successful (same as is_ok()).
   explicit operator bool() const { return is_ok(); }
 
   /**
@@ -258,6 +293,7 @@ public:
    * @brief Chains a function that returns a Result.
    * @param f Function () -> Result<U>.
    */
+  /** @copydoc and_then */
   template <typename F>
   auto and_then(F&& f) -> decltype(f()) {
     if (is_err())
@@ -265,6 +301,7 @@ public:
     return f();
   }
 
+  /** @copydoc and_then */
   template <typename F>
   auto and_then(F&& f) const -> decltype(f()) {
     if (is_err())

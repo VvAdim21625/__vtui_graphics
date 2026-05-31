@@ -23,10 +23,10 @@ Source: `CMakeLists.txt:7-28`
 
 ## Project layout
 
-- `include/vtui/` — public headers: `buffer.hpp`, `renderer.hpp`, `types.hpp`, `error.hpp`, `event.hpp`
-- `src/core/` — core rendering (`buffer.cpp`, `renderer.cpp`), compiler-config macros (`config.h`)
-- `src/platform/` — platform abstraction layer (`pal.h`, `win32.cpp`)
-- `src/util/` — UTF-8 utilities (`utf8.cpp`, `utf8.h`)
+- `include/vtui/` — public headers: `buffer.hpp`, `renderer.hpp`, `types.hpp`, `result.hpp`, `event.hpp`
+- `src/core/` — core rendering (`buffer.cpp`, `renderer.cpp`)
+- `src/platform/` — platform abstraction layer (`pal.hpp`, `win32.cpp`)
+- `src/util/` — UTF-8 utilities, wcwidth, transliteration (`utf8.cpp`, `utf8.hpp`, `wcwidth.cpp`, `wcwidth.hpp`, `translit.cpp`, `translit.hpp`)
 - `src/compositor/`, `src/input/`, `src/widgets/` — empty directories (planned, not yet implemented)
 - `example/` — single `main.cpp` consuming the library
 
@@ -37,8 +37,8 @@ Source: `CMakeLists.txt:7-28`
 
 ## Key architectural facts
 
-- **Rust-style error handling**: `Result<T>` / `Result<void>` with `.unwrap()`, `.expect()`, `.map()`, `.and_then()` — defined in `include/vtui/error.hpp`.
-- **Double-buffered screen**: `ScreenBuffer` uses front/back buffers with per-cell dirty tracking (`is_dirty`, `mark_dirty`). Call `swap()` to flip buffers.
+- **Rust-style error handling**: `Result<T>` / `Result<void>` with `.unwrap()`, `.expect()`, `.map()`, `.and_then()` — defined in `include/vtui/result.hpp`.
+- **Double-buffered screen**: `ScreenBuffer` uses front/back buffers with per-cell dirty tracking (`is_dirty`, `mark_dirty`). Draw to `at()`/`set_cell()`, flush with `present()`.
 - **Renderer**: emits ANSI escape sequences to stdout, batching output in a 4096-byte internal buffer. Only emits diffs (skips cells unchanged since last `present()`).
 - **Platform abstraction**: `pal.h` declares `vtui_pal_init/shutdown`, `vtui_pal_write_input/output`, `vtui_pal_poll_raw_event`. Currently only win32 implementation exists.
 - **Event system**: `KeyEvent`, `MouseEvent`, `ResizeEvent` types in `event.hpp` — but `input/` and `compositor/` are stubs; event polling is not wired up yet.
@@ -46,7 +46,7 @@ Source: `CMakeLists.txt:7-28`
 ## Quirks & gotchas
 
 - `src/` is a private include directory (`target_include_directories(vtui_core PRIVATE src)`) — internal headers like `platform/pal.h` use `#include "platform/pal.h"` from any source file.
-- Config macros in `src/core/config.h` control buffer sizing: `VTUI_BATCH_BUFFER_SIZE` (4096), `VTUI_FLUSH_THRESHOLD` (64), `VTUI_EST_BYTES_PER_CELL` (8).
-- Codepoints are `char32_t`. UTF-8 encode/decode helpers in `src/util/utf8.h`.
+- Buffer sizing constants are in `include/vtui/renderer.hpp`: `BufSize` (4096), `FlushThreshold` (64).
+- Codepoints are `char32_t`. UTF-8 encode/decode helpers in `src/util/utf8.hpp`.
 - Colors: 16 named ANSI colors + `Default` (255), stored in `Color` enum (`include/vtui/types.hpp`).
 - No tests, no CI, no formatter/linter scripts beyond `.clang-format`.

@@ -11,11 +11,13 @@ add_library(vtui_core
 
     # Утилиты
     src/util/utf8.cpp
+    src/util/wcwidth.cpp
+    src/util/grapheme.cpp
 
     # C++ ядро
     src/core/buffer.cpp
     src/core/renderer.cpp
-    src/core/error.cpp
+    src/core/result.cpp
 )
 
 target_include_directories(vtui_core PUBLIC include)

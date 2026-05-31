@@ -2,59 +2,80 @@
 
 #include <cstdio>
 
-#include "../util/utf8.h"
-#include "platform/pal.h"
+#include "platform/pal.hpp"
+#include "util/grapheme.hpp"
 
 namespace vtui {
 namespace {
 
+/// ANSI escape sequence for cursor positioning: CUP (row, column).
 constexpr char ANSI_CURSOR_FMT[] = "\x1b[%d;%dH";
+
+/// ANSI escape sequence for foreground and background colour via 256-colour
+/// SGR: "\e[38;5;fg;48;5;bgm".
 constexpr char ANSI_COLOR_FMT[] = "\x1b[38;5;%d;48;5;%dm";
 
 }  // namespace
 
+/** @copydoc Renderer::Renderer */
 Renderer::Renderer() : last_cursor_(InvalidCursor) {}
 
+/** @copydoc Renderer::~Renderer */
 Renderer::~Renderer() {
   flush();
 }
 
+/** @copydoc Renderer::flush */
 Result<void> Renderer::flush() {
   if (len_ > 0) {
-    if (!vtui_pal_write_output(reinterpret_cast<const uint8_t*>(buf_),
-                               static_cast<int>(len_)))
+    if (!pal::write_output(reinterpret_cast<const uint8_t*>(buf_),
+                           static_cast<int>(len_)))
       return {Err, Errc::IOError};
     len_ = 0;
   }
   return {};
 }
 
+/**
+ * @brief Check whether adding extra bytes would cross the flush threshold.
+ *
+ * The threshold (BufSize - FlushThreshold) ensures there is always room for
+ * the largest single ANSI sequence without exceeding the buffer.
+ */
 bool Renderer::would_overflow(size_t extra) const {
   return len_ + extra >= BufSize - FlushThreshold;
 }
 
+/** @brief Append a single byte to the buffer, flushing if it would overflow. */
 void Renderer::append(char c) {
   if (len_ >= BufSize - 1)
     flush();
   buf_[len_++] = c;
 }
 
+/** @brief Append a span of bytes to the buffer, auto-flushing as needed. */
 void Renderer::append_str(const char* s, size_t n) {
-  if (len_ + n >= BufSize - FlushThreshold)
-    flush();
-  for (size_t i = 0; i < n; ++i)
-    buf_[len_++] = s[i];
+  while (n > 0) {
+    size_t space = (BufSize - FlushThreshold) - len_;
+    size_t chunk = n < space ? n : space;
+    for (size_t i = 0; i < chunk; ++i)
+      buf_[len_++] = s[i];
+    s += chunk;
+    n -= chunk;
+    if (len_ >= BufSize - FlushThreshold)
+      flush();
+  }
 }
 
-void Renderer::append_utf8(Codepoint cp) {
-  char tmp[5];
-  vtui_utf8_encode(cp, tmp);
-  size_t n = 0;
-  while (tmp[n])
-    ++n;
-  append_str(tmp, n);
+/** @brief UTF-8 encode a grapheme cluster and append the resulting bytes. */
+void Renderer::append_cluster(const Cell& cell) {
+  char buf[48];
+  size_t n = grapheme::cluster_encode(cell, buf, sizeof(buf));
+  if (n > 0)
+    append_str(buf, n);
 }
 
+/** @brief Emit ANSI CUP "\e[row;colH" (1-based row and column). */
 void Renderer::append_cursor(Coord pos) {
   char tmp[32];
   int n =
@@ -63,6 +84,7 @@ void Renderer::append_cursor(Coord pos) {
     append_str(tmp, static_cast<size_t>(n));
 }
 
+/** @brief Emit ANSI SGR colour codes "\e[38;5;fg;48;5;bgm". */
 void Renderer::append_color(Color fg, Color bg) {
   char tmp[32];
   int n = std::snprintf(tmp, sizeof(tmp), ANSI_COLOR_FMT, static_cast<int>(fg),
@@ -71,6 +93,21 @@ void Renderer::append_color(Color fg, Color bg) {
     append_str(tmp, static_cast<size_t>(n));
 }
 
+/**
+ * @brief Diff a ScreenBuffer against the front buffer and emit ANSI escapes
+ *        for changed cells only.
+ *
+ * Suppresses redundant cursor-positioning and colour codes.  After the pass
+ * the front buffer is synced and all dirty flags cleared.
+ *
+ * Each cell is a complete grapheme cluster (base + optional combining marks,
+ * ZWJ sequences, variation selectors, etc.) and is emitted as a single unit.
+ * Cells marked with the trail flag (belonging to a preceding wide character)
+ * and control characters are skipped.
+ *
+ * @param buffer The ScreenBuffer to render.
+ * @return Ok or Err with Errc::IOError.
+ */
 Result<void> Renderer::present(ScreenBuffer& buffer) {
   if (buffer.empty())
     return {};
@@ -86,13 +123,25 @@ Result<void> Renderer::present(ScreenBuffer& buffer) {
         continue;
 
       const Cell& back = buffer.at(cursor);
-      Cell& front = buffer.front(cursor);
+      const Cell& front = buffer.front(cursor);
 
       if (front == back)
         continue;
 
+      // Skip cells that are trail halves of wide characters.
+      if (back.trail)
+        continue;
+
+      // Skip control characters (C0 except NUL, C1, DEL).
+      if ((back.base > 0 && back.base < 0x20) ||
+          (back.base >= 0x7F && back.base < 0xA0))
+        continue;
+
+      int w = back.width > 0 ? back.width : 1;
+
       if (would_overflow(32))
-        flush();
+        if (auto res = flush(); !res)
+          return res;
 
       if (last_cursor_ == InvalidCursor || x != last_cursor_.x + 1 ||
           y != last_cursor_.y)
@@ -104,15 +153,20 @@ Result<void> Renderer::present(ScreenBuffer& buffer) {
         last_bg_ = back.bg;
       }
 
-      append_utf8(back.ch);
+      append_cluster(back);
 
-      last_cursor_ = cursor;
-      front = back;
+      if (w > 1)
+        last_cursor_ = {static_cast<uint16_t>(cursor.x + w - 1), cursor.y};
+      else
+        last_cursor_ = cursor;
     }
   }
 
-  flush();
+  if (auto res = flush(); !res)
+    return res;
+
   buffer.clear_dirty();
+  buffer.sync_front();
   last_cursor_ = InvalidCursor;
 
   return {};

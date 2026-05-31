@@ -1,14 +1,23 @@
 #include <windows.h>
 
-#include "pal.h"
+#include "pal.hpp"
 
+// Saved console modes restored on shutdown.
 static DWORD original_input_mode = 0;
 static DWORD original_output_mode = 0;
 
+// Cached console handles.
 static HANDLE hIn = INVALID_HANDLE_VALUE;
 static HANDLE hOut = INVALID_HANDLE_VALUE;
 
-bool vtui_pal_init(void) {
+namespace vtui::pal {
+
+/// Initialise the Win32 console for vtui.
+///
+/// Enables UTF-8 output, virtual-terminal processing, mouse input, and the
+/// alternate screen buffer.  Disables QuickEdit to prevent accidental
+/// input capture.
+bool init() {
   hIn = GetStdHandle(STD_INPUT_HANDLE);
   hOut = GetStdHandle(STD_OUTPUT_HANDLE);
   if (hIn == INVALID_HANDLE_VALUE || hOut == INVALID_HANDLE_VALUE)
@@ -39,15 +48,20 @@ bool vtui_pal_init(void) {
   if (!SetConsoleMode(hOut, new_output_mode))
     return false;
 
-  if (!vtui_pal_write_output((const uint8_t*)"\x1b[?1049h\x1b[?25l", 14))
+  if (!write_output(reinterpret_cast<const uint8_t*>("\x1b[?1049h\x1b[?25l"),
+                    14))
     return false;
 
   return true;
 }
 
-bool vtui_pal_shutdown(void) {
-  bool write_ok =
-      vtui_pal_write_output((const uint8_t*)"\x1b[?1049l\x1b[?25h", 14);
+/// Restore the original console mode and leave the alternate screen.
+///
+/// Sends the exit-alternate-screen and show-cursor sequences, then restores
+/// the input and output console modes saved during init.
+bool shutdown() {
+  bool write_ok = write_output(
+      reinterpret_cast<const uint8_t*>("\x1b[?1049l\x1b[?25h"), 14);
 
   if (!SetConsoleMode(hIn, original_input_mode))
     return false;
@@ -58,23 +72,27 @@ bool vtui_pal_shutdown(void) {
   return write_ok;
 }
 
-bool vtui_pal_write_output(const uint8_t* buffer, int bytes) {
+/// Write bytes to the console output handle via WriteFile.
+bool write_output(const uint8_t* buffer, int bytes) {
   DWORD written;
-  if (!WriteFile(hOut, buffer, bytes, &written, NULL))
+  if (!WriteFile(hOut, buffer, bytes, &written, nullptr))
     return false;
 
-  return bytes == written;
+  return bytes == static_cast<int>(written);
 }
 
-bool vtui_pal_poll_raw_event(void* out_record) {
+/// Non-blocking poll for a raw console input record.
+bool poll_raw_event(void* out_record) {
   DWORD events_count = 0;
   GetNumberOfConsoleInputEvents(hIn, &events_count);
   if (events_count == 0)
     return false;
 
   DWORD read;
-  if (!ReadConsoleInput(hIn, (INPUT_RECORD*)out_record, 1, &read))
+  if (!ReadConsoleInput(hIn, static_cast<INPUT_RECORD*>(out_record), 1, &read))
     return false;
 
   return read == 1;
 }
+
+}  // namespace vtui::pal
